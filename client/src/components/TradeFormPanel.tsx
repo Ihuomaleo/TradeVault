@@ -13,6 +13,7 @@ import * as z from 'zod';
 import { createTrade, updateTrade } from '@/api/trades';
 import { useToast } from '@/hooks/useToast';
 import { X } from 'lucide-react';
+import { ScreenshotUpload } from '@/components/ScreenshotUpload';
 
 const tradeSchema = z.object({
   pair: z.string().min(1, 'Pair is required'),
@@ -44,6 +45,7 @@ interface TradeFormPanelProps {
 export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded }: TradeFormPanelProps) {
   const [selectedSetupTags, setSelectedSetupTags] = useState<string[]>([]);
   const [selectedEmotionTags, setSelectedEmotionTags] = useState<string[]>([]);
+  const [screenshots, setScreenshots] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -82,6 +84,7 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
       });
       setSelectedSetupTags(editingTrade.setupTags || []);
       setSelectedEmotionTags(editingTrade.emotionTags || []);
+      setScreenshots(editingTrade.screenshots || []);
     } else {
       reset({
         entryTime: new Date().toISOString().slice(0, 16),
@@ -91,6 +94,7 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
       });
       setSelectedSetupTags([]);
       setSelectedEmotionTags([]);
+      setScreenshots([]);
     }
   }, [editingTrade, open, reset]);
 
@@ -146,6 +150,7 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
         ...data,
         setupTags: selectedSetupTags,
         emotionTags: selectedEmotionTags,
+        screenshots: screenshots,
       };
 
       if (editingTrade) {
@@ -167,6 +172,7 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
       reset();
       setSelectedSetupTags([]);
       setSelectedEmotionTags([]);
+      setScreenshots([]);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save trade';
       console.error('Error saving trade:', error);
@@ -408,6 +414,9 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
             <Label htmlFor="notes">Notes</Label>
             <Textarea id="notes" placeholder="Add any notes about this trade..." {...register('notes')} rows={4} />
           </div>
+
+          {/* Screenshots */}
+          <ScreenshotUpload screenshots={screenshots} onChange={setScreenshots} />
 
           {/* Actions */}
           <div className="flex gap-2 pt-4">

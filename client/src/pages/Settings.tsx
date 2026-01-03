@@ -7,11 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Download, Trash2, Save } from 'lucide-react';
+import { Download, Trash2, Save, Palette } from 'lucide-react';
 import { getUserSettings, updateUserSettings, exportUserData, deleteAccount } from '@/api/settings';
 import { useToast } from '@/hooks/useToast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/components/ui/theme-provider';
 
 export function Settings() {
   const [settings, setSettings] = useState<Record<string, unknown> | null>(null);
@@ -19,6 +20,7 @@ export function Settings() {
   const { toast } = useToast();
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const loadSettings = useCallback(async () => {
     try {
@@ -143,6 +145,111 @@ export function Settings() {
                 <Save className="h-4 w-4" />
                 {isSaving ? 'Saving...' : 'Save Changes'}
               </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Palette className="h-5 w-5" />
+                Theme Preferences
+              </CardTitle>
+              <CardDescription>Customize the appearance of your dashboard</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button
+                  onClick={() => setTheme('light')}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    theme === 'light' ? 'border-blue-600 bg-blue-50 dark:bg-blue-950' : 'border-border hover:border-blue-400'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="w-full h-16 bg-white border rounded flex items-center justify-center">
+                      <div className="text-xs font-medium text-slate-900">Light</div>
+                    </div>
+                    <p className="text-sm font-medium text-center">Light</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setTheme('dark')}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    theme === 'dark' ? 'border-blue-600 bg-blue-50 dark:bg-blue-950' : 'border-border hover:border-blue-400'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="w-full h-16 bg-slate-900 border rounded flex items-center justify-center">
+                      <div className="text-xs font-medium text-white">Dark</div>
+                    </div>
+                    <p className="text-sm font-medium text-center">Dark</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setTheme('system')}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    theme === 'system' ? 'border-blue-600 bg-blue-50 dark:bg-blue-950' : 'border-border hover:border-blue-400'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="w-full h-16 border rounded flex">
+                      <div className="w-1/2 bg-white flex items-center justify-center">
+                        <div className="text-xs font-medium text-slate-900">L</div>
+                      </div>
+                      <div className="w-1/2 bg-slate-900 flex items-center justify-center">
+                        <div className="text-xs font-medium text-white">D</div>
+                      </div>
+                    </div>
+                    <p className="text-sm font-medium text-center">System</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setTheme('blue')}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    theme === 'blue' ? 'border-blue-600 bg-blue-50 dark:bg-blue-950' : 'border-border hover:border-blue-400'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="w-full h-16 bg-blue-100 border border-blue-300 rounded flex items-center justify-center">
+                      <div className="text-xs font-medium text-blue-900">Blue</div>
+                    </div>
+                    <p className="text-sm font-medium text-center">Blue</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setTheme('purple')}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    theme === 'purple' ? 'border-blue-600 bg-blue-50 dark:bg-blue-950' : 'border-border hover:border-blue-400'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="w-full h-16 bg-purple-100 border border-purple-300 rounded flex items-center justify-center">
+                      <div className="text-xs font-medium text-purple-900">Purple</div>
+                    </div>
+                    <p className="text-sm font-medium text-center">Purple</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setTheme('green')}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    theme === 'green' ? 'border-blue-600 bg-blue-50 dark:bg-blue-950' : 'border-border hover:border-blue-400'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="w-full h-16 bg-green-100 border border-green-300 rounded flex items-center justify-center">
+                      <div className="text-xs font-medium text-green-900">Green</div>
+                    </div>
+                    <p className="text-sm font-medium text-center">Green</p>
+                  </div>
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Theme changes are saved automatically and applied across all your devices.
+              </p>
             </CardContent>
           </Card>
 
