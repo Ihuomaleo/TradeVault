@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { createTrade, updateTrade } from '@/api/trades';
@@ -52,6 +52,7 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
     handleSubmit,
     watch,
     reset,
+    control,
     formState: { errors },
   } = useForm<TradeFormData>({
     resolver: zodResolver(tradeSchema),
@@ -195,32 +196,44 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="pair">Trading Pair *</Label>
-                <Select {...register('pair')}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select pair" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="EUR/USD">EUR/USD</SelectItem>
-                    <SelectItem value="GBP/USD">GBP/USD</SelectItem>
-                    <SelectItem value="USD/JPY">USD/JPY</SelectItem>
-                    <SelectItem value="USD/CHF">USD/CHF</SelectItem>
-                    <SelectItem value="AUD/USD">AUD/USD</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="pair"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select pair" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="EUR/USD">EUR/USD</SelectItem>
+                        <SelectItem value="GBP/USD">GBP/USD</SelectItem>
+                        <SelectItem value="USD/JPY">USD/JPY</SelectItem>
+                        <SelectItem value="USD/CHF">USD/CHF</SelectItem>
+                        <SelectItem value="AUD/USD">AUD/USD</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
                 {errors.pair && <p className="text-xs text-rose-600">{errors.pair.message}</p>}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="direction">Direction *</Label>
-                <Select {...register('direction')}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select direction" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="LONG">Long</SelectItem>
-                    <SelectItem value="SHORT">Short</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="direction"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select direction" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="LONG">Long</SelectItem>
+                        <SelectItem value="SHORT">Short</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
                 {errors.direction && <p className="text-xs text-rose-600">{errors.direction.message}</p>}
               </div>
             </div>
