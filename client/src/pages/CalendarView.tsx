@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -9,23 +9,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 export function CalendarView() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [calendarData, setCalendarData] = useState<any>(null);
+  const [calendarData, setCalendarData] = useState<Record<string, unknown> | null>(null);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [dayTrades, setDayTrades] = useState<any[]>([]);
+  const [dayTrades, setDayTrades] = useState<Record<string, unknown>[]>([]);
   const [showDayPanel, setShowDayPanel] = useState(false);
 
-  React.useEffect(() => {
-    loadCalendarData();
-  }, [currentDate]);
-
-  const loadCalendarData = async () => {
+  const loadCalendarData = useCallback(async () => {
     try {
       const data = await getCalendarData(currentDate.getFullYear(), currentDate.getMonth() + 1);
       setCalendarData(data);
     } catch (error) {
       console.error('Error loading calendar data:', error);
     }
-  };
+  }, [currentDate]);
+
+  React.useEffect(() => {
+    loadCalendarData();
+  }, [currentDate, loadCalendarData]);
 
   const handleDayClick = async (day: number) => {
     try {

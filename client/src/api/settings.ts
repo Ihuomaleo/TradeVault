@@ -30,7 +30,7 @@ export const getUserSettings = async () => {
 // Endpoint: PUT /api/settings
 // Request: { accountSize, defaultLotSize, timezone, currency, defaultPairs }
 // Response: { success: boolean }
-export const updateUserSettings = async (data: any) => {
+export const updateUserSettings = async (data: Record<string, unknown>) => {
   // Mocking the response
   return new Promise((resolve) => {
     setTimeout(() => {

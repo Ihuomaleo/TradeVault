@@ -170,7 +170,7 @@ export const getAllTrades = async (page: number = 1, limit: number = 50) => {
 // Endpoint: POST /api/trades
 // Request: { pair, direction, entryPrice, exitPrice, stopLoss, takeProfit, lotSize, commission, entryTime, setupTags, emotionTags, notes }
 // Response: { success: boolean, trade: Trade }
-export const createTrade = async (data: any) => {
+export const createTrade = async (data: Record<string, unknown>) => {
   // Mocking the response
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -197,7 +197,7 @@ export const createTrade = async (data: any) => {
 // Endpoint: PUT /api/trades/:id
 // Request: { pair, direction, entryPrice, exitPrice, stopLoss, takeProfit, lotSize, commission, entryTime, setupTags, emotionTags, notes }
 // Response: { success: boolean, trade: Trade }
-export const updateTrade = async (id: string, data: any) => {
+export const updateTrade = async (id: string, data: Record<string, unknown>) => {
   // Mocking the response
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -245,7 +245,7 @@ export const getCalendarData = async (year: number, month: number) => {
   // Mocking the response
   return new Promise((resolve) => {
     setTimeout(() => {
-      const days: any = {};
+      const days: Record<number, { pnl: number; trades: number; status: 'profit' | 'loss' }> = {};
       for (let i = 1; i <= 31; i++) {
         if (Math.random() > 0.5) {
           const pnl = Math.random() * 500 - 250;

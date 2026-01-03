@@ -37,7 +37,7 @@ const EMOTION_TAGS = ['Disciplined', 'FOMO', 'Greedy', 'Fearful', 'Confident', '
 interface TradeFormPanelProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  editingTrade?: any;
+  editingTrade?: Record<string, unknown>;
   onTradeAdded: () => void;
 }
 
@@ -166,11 +166,12 @@ export function TradeFormPanel({ open, onOpenChange, editingTrade, onTradeAdded 
       reset();
       setSelectedSetupTags([]);
       setSelectedEmotionTags([]);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save trade';
       console.error('Error saving trade:', error);
       toast({
         title: 'Error',
-        description: error.message || 'Failed to save trade',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {

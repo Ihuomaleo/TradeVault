@@ -12,10 +12,10 @@ import {
 } from '@/api/analytics';
 
 export function StrategyAnalytics() {
-  const [strategyData, setStrategyData] = useState<any>(null);
-  const [emotionData, setEmotionData] = useState<any>(null);
-  const [sessionData, setSessionData] = useState<any>(null);
-  const [pairData, setPairData] = useState<any>(null);
+  const [strategyData, setStrategyData] = useState<Record<string, unknown> | null>(null);
+  const [emotionData, setEmotionData] = useState<Record<string, unknown> | null>(null);
+  const [sessionData, setSessionData] = useState<Record<string, unknown> | null>(null);
+  const [pairData, setPairData] = useState<Record<string, unknown>[]>([]);
   const [viewMode, setViewMode] = useState<'winRate' | 'pnl'>('winRate');
 
   React.useEffect(() => {
@@ -42,7 +42,7 @@ export function StrategyAnalytics() {
     return <div className="text-center py-8">Loading analytics...</div>;
   }
 
-  const StatBox = ({ label, value, color }: any) => (
+  const StatBox = ({ label, value, color }: { label: string; value: string | number; color: string }) => (
     <div className="p-4 rounded-lg bg-muted">
       <p className="text-sm text-muted-foreground">{label}</p>
       <p className={`text-2xl font-bold ${color}`}>{value}</p>
@@ -65,7 +65,7 @@ export function StrategyAnalytics() {
               <CardTitle>Strategy Performance by Setup</CardTitle>
               <CardDescription>Win rate and profitability by trading setup</CardDescription>
             </div>
-            <Tabs value={viewMode} onValueChange={(v: any) => setViewMode(v)}>
+            <Tabs value={viewMode} onValueChange={(v: 'winRate' | 'pnl') => setViewMode(v)}>
               <TabsList>
                 <TabsTrigger value="winRate">Win Rate</TabsTrigger>
                 <TabsTrigger value="pnl">P/L</TabsTrigger>
@@ -106,8 +106,8 @@ export function StrategyAnalytics() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {strategyData.tableData.map((row: any) => (
-                <TableRow key={row.setup}>
+              {strategyData.tableData.map((row: Record<string, unknown>) => (
+                <TableRow key={String(row.setup)}>
                   <TableCell className="font-medium">{row.setup}</TableCell>
                   <TableCell>{row.trades}</TableCell>
                   <TableCell className="text-blue-600 font-semibold">{row.winRate.toFixed(1)}%</TableCell>
@@ -199,8 +199,8 @@ export function StrategyAnalytics() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sessionData.tableData.map((row: any) => (
-                <TableRow key={row.session}>
+              {sessionData.tableData.map((row: Record<string, unknown>) => (
+                <TableRow key={String(row.session)}>
                   <TableCell className="font-medium">{row.session}</TableCell>
                   <TableCell>{row.trades}</TableCell>
                   <TableCell className="text-blue-600 font-semibold">{row.winRate.toFixed(1)}%</TableCell>
@@ -261,8 +261,8 @@ export function StrategyAnalytics() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {pairData.map((row: any) => (
-                <TableRow key={row.pair}>
+              {pairData.map((row: Record<string, unknown>) => (
+                <TableRow key={String(row.pair)}>
                   <TableCell>
                     <Badge variant="outline">{row.pair}</Badge>
                   </TableCell>

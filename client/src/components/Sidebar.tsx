@@ -2,13 +2,13 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { BarChart3, Calendar, LogBook, Settings, TrendingUp, Home } from 'lucide-react';
+import { BarChart3, Calendar, BookOpen, Settings, TrendingUp, Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 const navItems = [
   { label: 'Dashboard', href: '/', icon: Home },
-  { label: 'Trade Log', href: '/trade-log', icon: LogBook },
+  { label: 'Trade Log', href: '/trade-log', icon: BookOpen },
   { label: 'Strategy Analytics', href: '/analytics', icon: BarChart3 },
   { label: 'Calendar', href: '/calendar', icon: Calendar },
   { label: 'Settings', href: '/settings', icon: Settings },

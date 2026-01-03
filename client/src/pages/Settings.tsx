@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,17 +14,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export function Settings() {
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<Record<string, unknown> | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     try {
       const data = await getUserSettings();
       setSettings(data);
@@ -36,7 +32,11 @@ export function Settings() {
         variant: 'destructive',
       });
     }
-  };
+  }, [toast]);
+
+  React.useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
   const handleSaveSettings = async () => {
     setIsSaving(true);

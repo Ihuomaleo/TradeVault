@@ -12,9 +12,9 @@ import { FloatingActionButton } from '@/components/FloatingActionButton';
 
 export function Dashboard() {
   const [filterMistakes, setFilterMistakes] = useState(false);
-  const [stats, setStats] = React.useState<any>(null);
-  const [equityData, setEquityData] = React.useState<any[]>([]);
-  const [recentTrades, setRecentTrades] = React.useState<any[]>([]);
+  const [stats, setStats] = React.useState<Record<string, unknown> | null>(null);
+  const [equityData, setEquityData] = React.useState<Record<string, unknown>[]>([]);
+  const [recentTrades, setRecentTrades] = React.useState<Record<string, unknown>[]>([]);
   const [showForm, setShowForm] = useState(false);
 
   React.useEffect(() => {
@@ -39,7 +39,7 @@ export function Dashboard() {
     return <div className="text-center py-8">Loading...</div>;
   }
 
-  const StatCard = ({ title, value, icon: Icon, color, subtext }: any) => (
+  const StatCard = ({ title, value, icon: Icon, color, subtext }: { title: string; value: string | number; icon: React.ComponentType<{ className: string }>; color: string; subtext?: string | number }) => (
     <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">

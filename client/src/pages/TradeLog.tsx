@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,11 +12,11 @@ import { TradeFormPanel } from '@/components/TradeFormPanel';
 import { useToast } from '@/hooks/useToast';
 
 export function TradeLog() {
-  const [trades, setTrades] = useState<any[]>([]);
-  const [filteredTrades, setFilteredTrades] = useState<any[]>([]);
+  const [trades, setTrades] = useState<Record<string, unknown>[]>([]);
+  const [filteredTrades, setFilteredTrades] = useState<Record<string, unknown>[]>([]);
   const [selectedTrades, setSelectedTrades] = useState<Set<string>>(new Set());
   const [showForm, setShowForm] = useState(false);
-  const [editingTrade, setEditingTrade] = useState<any>(null);
+  const [editingTrade, setEditingTrade] = useState<Record<string, unknown> | null>(null);
   const [filters, setFilters] = useState({
     pair: '',
     direction: '',
@@ -25,15 +25,7 @@ export function TradeLog() {
   });
   const { toast } = useToast();
 
-  React.useEffect(() => {
-    loadTrades();
-  }, []);
-
-  React.useEffect(() => {
-    applyFilters();
-  }, [trades, filters]);
-
-  const loadTrades = async () => {
+  const loadTrades = useCallback(async () => {
     try {
       const data = await getAllTrades();
       setTrades(data);
@@ -45,9 +37,9 @@ export function TradeLog() {
         variant: 'destructive',
       });
     }
-  };
+  }, [toast]);
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = trades;
 
     if (filters.pair) {
@@ -62,13 +54,22 @@ export function TradeLog() {
     if (filters.searchTerm) {
       filtered = filtered.filter(
         (t) =>
-          t.pair.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-          t.notes?.toLowerCase().includes(filters.searchTerm.toLowerCase())
+          String(t.pair).toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+          String(t.notes).toLowerCase().includes(filters.searchTerm.toLowerCase())
       );
     }
 
     setFilteredTrades(filtered);
-  };
+  }, [trades, filters]);
+
+  React.useEffect(() => {
+    loadTrades();
+  }, [loadTrades]);
+
+  React.useEffect(() => {
+    applyFilters();
+  }, [trades, filters, applyFilters]);
+
 
   const handleDeleteTrade = async (tradeId: string) => {
     try {
