@@ -18,9 +18,9 @@ export function TradeLog() {
   const [showForm, setShowForm] = useState(false);
   const [editingTrade, setEditingTrade] = useState<Record<string, unknown> | null>(null);
   const [filters, setFilters] = useState({
-    pair: '',
-    direction: '',
-    status: '',
+    pair: 'all',
+    direction: 'all',
+    status: 'all',
     searchTerm: '',
   });
   const { toast } = useToast();
@@ -42,13 +42,13 @@ export function TradeLog() {
   const applyFilters = useCallback(() => {
     let filtered = trades;
 
-    if (filters.pair) {
+    if (filters.pair && filters.pair !== 'all') {
       filtered = filtered.filter((t) => t.pair === filters.pair);
     }
-    if (filters.direction) {
+    if (filters.direction && filters.direction !== 'all') {
       filtered = filtered.filter((t) => t.direction === filters.direction);
     }
-    if (filters.status) {
+    if (filters.status && filters.status !== 'all') {
       filtered = filtered.filter((t) => t.status === filters.status);
     }
     if (filters.searchTerm) {
@@ -170,7 +170,7 @@ export function TradeLog() {
                 <SelectValue placeholder="All Pairs" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Pairs</SelectItem>
+                <SelectItem value="all">All Pairs</SelectItem>
                 {uniquePairs.map((pair) => (
                   <SelectItem key={pair} value={pair}>
                     {pair}
@@ -183,7 +183,7 @@ export function TradeLog() {
                 <SelectValue placeholder="All Directions" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Directions</SelectItem>
+                <SelectItem value="all">All Directions</SelectItem>
                 <SelectItem value="LONG">Long</SelectItem>
                 <SelectItem value="SHORT">Short</SelectItem>
               </SelectContent>
@@ -193,7 +193,7 @@ export function TradeLog() {
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="OPEN">Open</SelectItem>
                 <SelectItem value="CLOSED">Closed</SelectItem>
               </SelectContent>
